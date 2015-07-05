@@ -1,9 +1,16 @@
+#include "AST_bool.h"
+#include "../AST/AST_structures.h"
+#include "AST_parse.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
 #define SxxTrue(a) \
 	parseData = a;\
 	return true;
 bool S01() {
 	char *ret = malloc(512);
-	if (sscanf(next, "REM %^[\n]\n", ret) < 1)
+	if (sscanf(next, "REM %[^\n]\n", ret) < 1)
 		return false;
 	next +=   strlen("REM ")
 		+ strlen(ret);
@@ -34,8 +41,7 @@ bool S04() {
 		return false;
 	++next;
 	ret = malloc(sizeof(struct S04_st));
-	ret->assign = malloc(sizeof struct S08_st));
-	ret->ret = malloc(sizeof(struct S03_st));
+	ret->assign = malloc(sizeof(struct S08_st));
 	ret->assign->t = assign;
 	ret->assign->match = parseData;
 	ret->assign->name = (char *)"r";
@@ -57,7 +63,7 @@ bool S05() {
 bool S06() {
 	struct S06_st *ret = malloc(sizeof(struct S06_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "def %^[;];", ret->name) < 1) {
+	if (sscanf(next, "def %[^;];", ret->name) < 1) {
 		free(ret->name);
 		free(ret);
 		return false;
@@ -68,7 +74,7 @@ bool S06() {
 bool S07() {
 	struct S07_st *ret = malloc(sizeof(struct S07_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "undef %^[;];", ret->name) < 1) {
+	if (sscanf(next, "undef %[^;];", ret->name) < 1) {
 		free(ret->name);
 		free(ret);
 		return false;
@@ -79,10 +85,10 @@ bool S07() {
 bool S08() {
 	struct S08_st *ret = malloc(sizeof(struct S08_st));
 	ret->name = malloc(64);
-	if (scanf(next, "%s = ", ret->name) < 1)
+	if (sscanf(next, "%s = ", ret->name) < 1)
 		goto err;
 	next += strlen(ret->name) + strlen(" = ");
-	if ((ret->t = E()) == tErr)
+	if ((ret->t = E()) == tERR)
 		goto err;
 	ret->match = parseData;
 	SxxTrue(ret);
@@ -94,17 +100,20 @@ err:
 bool S09() {
 	struct S09_st *ret = malloc(sizeof(struct S09_st));
 	ret->name = malloc(64);
-	if (scanf(next, "proc %s = [", ret->name) < 1)
+	if (sscanf(next, "proc %s = [", ret->name) < 1)
 		goto err;
 	next += strlen("proc ") + strlen(ret->name) +
 		strlen(" = [");
-	ret->statements = malloc(sizeof(struct block));
+	ret->statements = malloc(sizeof(struct AST_block));
 	ret->statements->head = ret->statements->tail = NULL;
 	ret->statements->num = 0;
-	if (!parseBlock(ret->statements))
+	parseBlock(ret->statements);
+	if (ret->statements->num == 0)
 		goto err;
-	if (strncmp("];", next, strlen("];"))
+	if (strncmp("];", next, strlen("];")))
 		goto err;
+	whiteSpaceAny();
+	next += strlen("];");
 	SxxTrue(ret);
 err:
 	free(ret->name);
@@ -114,7 +123,7 @@ err:
 bool S10() {
 	struct S10_st *ret = malloc(sizeof(struct S10_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "procdef %^[;];", ret->name) < 1) {
+	if (sscanf(next, "procdef %[^;];", ret->name) < 1) {
 		free(ret->name);
 		free(ret);
 		return false;
@@ -125,7 +134,7 @@ bool S10() {
 bool S11() {
 	struct S07_st *ret = malloc(sizeof(struct S07_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "def %^[;];", ret->name) < 1) {
+	if (sscanf(next, "def %[^;];", ret->name) < 1) {
 		free(ret->name);
 		free(ret);
 		return false;
@@ -162,7 +171,7 @@ err:
 bool S14() {
 	struct S14_st *ret = malloc(sizeof(struct S14_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "read %^[;];", ret->name) < 1)
+	if (sscanf(next, "read %[^;];", ret->name) < 1)
 	{
 		free(ret->name);
 		free(ret);
@@ -174,7 +183,7 @@ bool S14() {
 bool S15() {
 	struct S15_st *ret = malloc(sizeof(struct S15_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "readc %^[;];", ret->name) < 1)
+	if (sscanf(next, "readc %[^;];", ret->name) < 1)
 	{
 		free(ret->name);
 		free(ret);
@@ -186,7 +195,7 @@ bool S15() {
 bool S16() {
 	struct S16_st *ret = malloc(sizeof(struct S16_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "call %^[;];", ret->name) < 1)
+	if (sscanf(next, "call %[^;];", ret->name) < 1)
 	{
 		free(ret->name);
 		free(ret);
@@ -197,7 +206,7 @@ bool S16() {
 }
 bool S17() {
 	struct S17_st *ret = malloc(sizeof(struct S17_st));
-	if (strncmp("push ", next, strlen("push "))
+	if (strncmp("push ", next, strlen("push ")))
 		goto err;
 	next += strlen("push ");
 	if ((ret->t = E()) == tERR)
@@ -213,7 +222,7 @@ err:
 bool S18() {
 	struct S18_st *ret = malloc(sizeof(struct S18_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "pop %^[;];", ret->name) < 1)
+	if (sscanf(next, "pop %[^;];", ret->name) < 1)
 	{
 		free(ret->name);
 		free(ret);
@@ -224,10 +233,10 @@ bool S18() {
 }
 bool S19() {
 	char *save, *fname = malloc(128);
-	if (strncmp("parse('", next, strlen("parse('"))
+	if (strncmp("parse('", next, strlen("parse('")))
 		goto err;
 	next += strlen("parse('");
-	if (sscanf(next, "%^[']');", fname) < 1)
+	if (sscanf(next, "%[^']');", fname) < 1)
 		goto err;
 	next += strlen("');");
 	save = next;
@@ -244,27 +253,26 @@ bool S20() {
 	struct S20_st *ret = malloc(sizeof(struct S20_st));
 	ret->ifTrue = malloc(64);
 	ret->ifFalse = malloc(64);
-	if (strncmp("if (", next, strlen("if ("))
+	if (strncmp("if (", next, strlen("if (")))
 		goto err;
 	next += strlen("if (");
 	if ((ret->t = E()) == tERR)
 		goto err;
 	ret->match = parseData;
-	if (strncmp(") -> ", next, strlen(") -> "))
-		goto err1;
+	if (strncmp(") -> ", next, strlen(") -> ")))
+		goto err;
 	next += strlen(") -> ");
 	if (sscanf(next, "%s", ret->ifTrue) < 1)
-		goto err1;
+		goto err;
 	next += strlen(ret->ifTrue);
-	if (strncmp(" : ", next, strlen(" : "))
-		goto err1;
+	if (strncmp(" : ", next, strlen(" : ")))
+		goto err;
 	next += strlen(" : ");
-	if (sscanf(next, "%^[;]", ret->ifFalse) < 1)
-		goto err1;
+	if (sscanf(next, "%[^;]", ret->ifFalse) < 1)
+		goto err;
 	next += strlen(ret->ifFalse);
 	if (*next++ != ';') goto err;
 	SxxTrue(ret);
-err1:	free(ret->match);
 err:
 	free(ret->ifTrue);
 	free(ret->ifFalse);

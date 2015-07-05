@@ -1,22 +1,49 @@
-enum parseType { tNOCODE, tERR,
-	tS01 = tNOCODE,
-	tS02 = tNOCODE,
-	tS03 = tNOCODE,
-	tS19 = tNOCODE,
-	tS11 = tS07,
-	tS04, tS05, tS06, tS07, tS08, tS09,
-	tS10, tS12, tS13, tS14, tS15, tS16,
-	tS17, tS18, tS20, tE01, tE02, tE03,
-	tT01, tT02, tT03, tT04, tF01, tF02
+#ifndef AST_STRUCT_H
+#define AST_STRUCT_H
+
+#define ETNOCODE 0x0000
+#define ETS07 0x0005
+enum parseType {
+	tNOCODE = ETNOCODE,
+	tERR	= 0x0001,
+	tS01	= ETNOCODE,
+	tS02	= ETNOCODE,
+	tS03	= ETNOCODE,
+	tS19	= ETNOCODE,
+	tS11	= ETS07,
+	tS04	= 0x0002,
+	tS05	= 0x0003,
+	tS06	= 0x0004,
+	tS07	= ETS07,
+	tS08	= 0x0006,
+	tS09	= 0x0007,
+	tS10	= 0x0008,
+	tS12	= 0x0009,
+	tS13	= 0x000A,
+	tS14	= 0x000B,
+	tS15	= 0x000C,
+	tS16	= 0x000D,
+	tS17	= 0x000E,
+	tS18	= 0x000F,
+	tS20	= 0x0010,
+	tE01	= 0x0011,
+	tE02	= 0x0012,
+	tE03	= 0x0013,
+	tT01	= 0x0014,
+	tT02	= 0x0015,
+	tT03	= 0x0016,
+	tT04	= 0x0017,
+	tF01	= 0x0018,
+	tF02	= 0x0019
 };
-struct block_node {
+struct AST_block_node {
 	enum parseType t;
 	void *match;
-	struct block_node *next;
+	struct AST_block_node *next;
 };
-struct block {
-	struct block_node *head,
-			  *tail;
+struct AST_block {
+	struct AST_block_node *head,
+			      *tail;
 	unsigned int num;
 };
 struct S04_st {
@@ -39,7 +66,7 @@ struct S08_st {
 	char *name; //name of <var>
 };
 struct S09_st {
-	struct block *statements;
+	struct AST_block *statements;
 	char *name;
 };
 struct S10_st {
@@ -112,3 +139,5 @@ struct F01_st {
 struct F02_st {
 	char *name;
 };
+
+#endif
