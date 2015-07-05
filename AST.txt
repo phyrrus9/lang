@@ -1,0 +1,120 @@
+define statement as:
+S01	REM text                     <-----ignored
+S02	;
+S03	return;
+S04	return expression;           <-----evaluates to r = expression; return;
+S05	expression;
+S06	def <var>;
+S07	undef <var>;
+S08	<var> = expression;
+S09	proc <func> = [ statements ];
+S10	procdef <func>;
+S11	delete <var>;
+S12	print expression;
+S13	printc expression;
+S14	read <var>;
+S15	readc <var>;
+S16	call <func>;
+S17	push expression;
+S18	pop <var>;
+S19	parse('filename');
+S20	if (expression) -> <func> : <func>;
+
+define expression as:
+E01	term
+E02	term + expression
+E03	term - expression
+
+define term as:
+T01	factor
+T02	factor * expression
+T03	factor / expression
+T04	(expression)
+
+define factor as:
+F01	constant
+F02	variable
+
+
+
+
+sample:
+REM math.lang
+proc sub_op = [ o = o - 1; ];
+proc mul = [ return a * b; ];
+proc div = [ return a / b; ];
+proc add = [ return a + b; ];
+proc sub = [ return a + b; ];
+REM main.lang
+parse('math.lang');
+proc calc = [
+	printc 49;
+	printc 58;
+	read a;
+	printc 111;
+	printc 58;
+	read o;
+	printc 50;
+	printc 58;
+	read b;
+	if (o) -> sub_op : mul;
+	if (o) -> sub_op : div;
+	if (o) -> sub_op : add;
+	if (o) -> calc : sub;
+	return r;
+];
+proc main = [
+	call calc;
+	print r;
+	return 0;
+];
+parse('/usr/lang/include/init.lang');
+REM init.lang
+call main;
+return;
+
+
+
+
+
+
+
+
+
+
+S->REM Txt()
+S->;
+S->return;
+S->return E();
+S->E();
+S->def V();
+S->undef V();
+S->V() = E();
+S->proc V() = [ Ss() ];
+S->procdef V();
+S->delete V();
+S->print E();
+S->printc E();
+S->read V();
+S->readc V();
+S->call V();
+S->push E();
+S->pop V();
+S->parse('Fname()');
+S->if (E()) -> V() : V();
+
+E->T()
+E->T() + E()
+E->T() - E()
+
+T->F()
+T->F() * E()
+T->F() / E()
+T->(E())
+
+F->CONSTANT
+F->VARIABLE
+
+
+
+
