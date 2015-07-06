@@ -35,52 +35,7 @@ define factor as:
 F01	constant
 F02	variable
 
-
-
-
-sample:
-REM math.lang
-proc sub_op = [ o = o - 1; ];
-proc mul = [ return a * b; ];
-proc div = [ return a / b; ];
-proc add = [ return a + b; ];
-proc sub = [ return a + b; ];
-REM main.lang
-parse('math.lang');
-proc calc = [
-	printc 49;
-	printc 58;
-	read a;
-	printc 111;
-	printc 58;
-	read o;
-	printc 50;
-	printc 58;
-	read b;
-	if (o) -> sub_op : mul;
-	if (o) -> sub_op : div;
-	if (o) -> sub_op : add;
-	if (o) -> calc : sub;
-	return r;
-];
-proc main = [
-	call calc;
-	print r;
-	return 0;
-];
-parse('/usr/lang/include/init.lang');
-REM init.lang
-call main;
-return;
-
-
-
-
-
-
-
-
-
+sample: (see /lang/examples)
 
 S->REM Txt()
 S->;

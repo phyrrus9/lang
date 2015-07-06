@@ -45,7 +45,7 @@ bool E03() {
 		goto err;
 	ret->match[0] = parseData;
 	if (!whiteSpace1Plus()) goto err;
-	if (*next++ != '+') goto err;
+	if (*next++ != '-') goto err;
 	if (!whiteSpace1Plus()) goto err;
 	if ((ret->t[1] = E()) == tERR)
 		goto err;

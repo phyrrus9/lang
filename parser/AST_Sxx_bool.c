@@ -91,6 +91,9 @@ bool S08() {
 	if ((ret->t = E()) == tERR)
 		goto err;
 	ret->match = parseData;
+	whiteSpaceAny();
+	if (*next++ != ';')
+		goto err;
 	SxxTrue(ret);
 err:
 	free(ret->name);
@@ -100,20 +103,21 @@ err:
 bool S09() {
 	struct S09_st *ret = malloc(sizeof(struct S09_st));
 	ret->name = malloc(64);
-	if (sscanf(next, "proc %s = [", ret->name) < 1)
+	if (sscanf(next, "proc %[A-Za-z0-9_] =", ret->name) < 1)
 		goto err;
+	if (isdigit(*ret->name))
+		goto err;
+	whiteSpaceAny();
 	next += strlen("proc ") + strlen(ret->name) +
-		strlen(" = [");
+		strlen(" =");
 	ret->statements = malloc(sizeof(struct AST_block));
 	ret->statements->head = ret->statements->tail = NULL;
 	ret->statements->num = 0;
-	parseBlock(ret->statements);
-	if (ret->statements->num == 0)
-		goto err;
-	if (strncmp("];", next, strlen("];")))
+	if (!parseBlock(ret->statements))
 		goto err;
 	whiteSpaceAny();
-	next += strlen("];");
+	if (*next++ != ';')
+		goto err;
 	SxxTrue(ret);
 err:
 	free(ret->name);
@@ -238,10 +242,10 @@ bool S19() {
 	next += strlen("parse('");
 	if (sscanf(next, "%[^']');", fname) < 1)
 		goto err;
-	next += strlen("');");
+	next += strlen(fname) + strlen("');");
 	save = next;
 	if (!parseFile(fname, AST))
-		goto err;
+		fprintf(stderr, "Error parsing %s\n", fname);
 	next = save;
 	free(fname);
 	SxxTrue(NULL);

@@ -2,6 +2,7 @@
 #include "../AST/AST_structures.h"
 
 bool parseFile(char *, struct AST_block *);
+bool parseInput(struct AST_block *);
 bool parseBlock(struct AST_block *);
 bool whiteSpace1();
 void whiteSpaceAny();

@@ -1,0 +1,26 @@
+parse('test.lang');
+
+proc test = [
+	printc 49;
+	printc 58;
+	read a;
+	printc 111;
+	printc 58;
+	read o;
+	printc 50;
+	printc 58;
+	read b;
+	if (o) -> sub_op : mul;
+	if (o) -> sub_op : div;
+	if (o) -> sub_op : add;
+	if (o) -> calc : sub;
+	return r;
+];
+
+proc main = [
+	call test;
+	print r;
+	return 0;
+];
+
+parse('init.lang');

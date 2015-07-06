@@ -1,0 +1,7 @@
+Lang is a test programming language with an interpreter and a compiler. The beauty of this language is that it can be natively interpreted or compiled.
+You can use the interpreter functionality to run interactive programs if you desire, or to test your program in a virtual machine before running it as
+native code.
+
+This project is another one of my toy projects, its main goal is to help me learn a little more about compilers and how they work, as well as abstract
+programming languages. Feel free to add new features to this, write a standard library, whatever you want. All of the language keywords (and relative
+descriptions of what they do) are in AST.txt

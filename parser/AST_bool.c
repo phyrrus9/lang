@@ -77,32 +77,33 @@ S16_above:
 enum parseType E()
 {
 	char *save = next;
-	if (!E01()) {
+	if (!E02()) {
 		next = save;
-		if (!E02()) {
+		if (!E03()) {
 			next = save;
-			if (!E03()) {
+			if (!E01()) {
 				return tERR;
-			} else return tE03;
-		} else return tE02;
-	} else return tE01;
+			} else return tE01;
+		} else return tE03;
+	} else return tE02;
 	return tERR;
 }
 
 enum parseType T()
 {
 	char *save = next;
-	if (!T01()) {
+	if (!T04()) {
 		next = save;
 		if (!T02()) {
 			next = save;
 			if (!T03()) {
-				if (!T04()) {
+				next = save;
+				if (!T01()) {
 					return tERR;
-				} else return tT04;
+				} else return tT01;
 			} else return tT03;
 		} else return tT02;
-	} else return tT01;
+	} else return tT04;
 	return tERR;
 }
 

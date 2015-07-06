@@ -1,0 +1,6 @@
+REM math.lang
+proc sub_op = [ o = o - 1; ];
+proc mul = [ return a * b; ];
+proc div = [ return a / b; ];
+proc add = [ return a + b; ];
+proc sub = [ return a + b; ];
