@@ -1,0 +1,37 @@
+REM =====================================================
+REM # lang makes functions really simple. but what if   #
+REM # you want to call a function recursively? Well,    #
+REM # since all of lang's variables are global, this    #
+REM # becomes an issue. Here is a commented example     #
+REM # of how to make your function recursive-compadible.#
+REM # NOTE: this is a caller-ABI                        #
+REM =====================================================
+defproc myfunc_frame;
+defproc myfunc_code;
+defproc myfunc;
+defproc proc_nil;
+REM proc to create our frame
+proc myfunc_frame = [
+	REM we want to push every new character to
+	REM the stack, so we preserve old vars
+	push a;	
+];
+REM the actual code for our function
+proc myfunc_code = [
+	readc a;
+	if (a - 10) -> proc_nil : myfunc;
+	pop a;
+	printc a;
+	return 0;
+];
+REM the caller
+proc myfunc = [
+	call myfunc_frame;
+	call myfunc_code;
+	return 0;
+];
+proc main = [
+	a = 10;
+	call myfunc;
+	return 0;
+];

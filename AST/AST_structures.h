@@ -10,6 +10,7 @@ enum parseType {
 	tS02	= ETNOCODE,
 	tS03	= ETNOCODE,
 	tS19	= ETNOCODE,
+	tS21	= ETNOCODE,
 	tS11	= ETS07,
 	tS04	= 0x0002,
 	tS05	= 0x0003,

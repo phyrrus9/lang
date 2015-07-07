@@ -283,4 +283,15 @@ err:
 	free(ret);
 	return false;
 }
+bool S21() {
+	if (strncmp("/*", next, strlen("/*")))
+		goto err;
+	next += strlen("/*");
+	while (strncmp("*/", next++, strlen("*/")))
+		if (*next == 0)
+			goto err;
+	return true;
+err:
+	return false;
+}
 #undef SxxTrue

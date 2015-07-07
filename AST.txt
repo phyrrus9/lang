@@ -19,6 +19,7 @@ S17	push expression;
 S18	pop <var>;
 S19	parse('filename');
 S20	if (expression) -> <func> : <func>;
+S21	/* text */
 
 define expression as:
 E01	term

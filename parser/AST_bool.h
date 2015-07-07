@@ -32,6 +32,7 @@ bool S17();
 bool S18();
 bool S19();
 bool S20();
+bool S21();
 
 bool E01();
 bool E02();
