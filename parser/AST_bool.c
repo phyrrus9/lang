@@ -65,12 +65,16 @@ S16_above:
 				if (!S19()) {
 					next = save;
 					if (!S20()) {
-						return tERR;
+						goto S21_above;
 					} else return tS20;
 				} else return tS19;
 			} else return tS18;
 		} else return tS17;
 	} else return tS16;
+S21_above:
+	if (!S21()) {
+		return tERR;
+	} else return tS21;
 	return tERR;
 }
 
