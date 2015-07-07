@@ -22,3 +22,6 @@ struct procedure_list_st *allocProcDB();
 bool defineProc(struct procedure_list_st **db, char *name, struct AST_block *blk);
 struct AST_block *getProc(struct procedure_list_st **db, char *name); //only returns if code exists
 void deAllocProcDB(struct procedure_list_st **db);
+
+/* misc prototypes - DB_misc.c */
+void DB_error(char *msg, char *fmt, bool die,  ...);
